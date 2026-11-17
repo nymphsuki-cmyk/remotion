@@ -1,0 +1,87 @@
+import { interpolate, useCurrentFrame, useVideoConfig } from "remotion";
+import React from "react";
+
+interface ScientistProps {
+  pose: "standing" | "waving" | "pointing" | "thinking" | "experimenting";
+  expression: "smiling" | "focused" | "surprised" | "confident";
+}
+
+export const ScientistAlya: React.FC<ScientistProps> = ({ pose, expression }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+
+  // Efek idle (sedikit bernapas / naik-turun halus)
+  const breath = Math.sin(frame / (fps * 0.5)) * 4;
+
+  // Animasi tangan melambai (jika pose waving)
+  let armRotation = 0;
+  if (pose === "waving") {
+    armRotation = Math.sin(frame / (fps * 0.2)) * 15;
+  }
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        transform: `translateY(${breath}px)`,
+        position: "relative",
+      }}
+    >
+      {/* Label Nama / Indikator AI Studio */}
+      <div style={{ position: "absolute", top: -40, font: "bold 16px sans-serif", color: "#333" }}>
+        Alya (Scientist) - Ekspresi: {expression} | Pose: {pose}
+      </div>
+
+      {/* Bagian Kepala & Rambut */}
+      <div style={{ width: 120, height: 120, backgroundColor: "#5c3a21", borderRadius: "50%", position: "relative" }}>
+        {/* Kacamata Lab */}
+        <div style={{
+          position: "absolute", top: 40, left: 20, width: 80, height: 30,
+          border: "3px solid #ccc", borderRadius: 15, backgroundColor: "rgba(255,255,255,0.2)"
+        }} />
+      </div>
+
+      {/* Badan & Jas Lab */}
+      <div style={{
+        width: 160, height: 220, backgroundColor: "#ffffff",
+        border: "3px solid #1e3a8a", borderRadius: "10px 10px 0 0",
+        position: "relative", display: "flex", justifyContent: "center"
+      }}>
+        {/* Lengan Kanan (Dinamis berdasarkan pose) */}
+        <div style={{
+          position: "absolute",
+          left: -35,
+          top: 20,
+          width: 35,
+          height: 120,
+          backgroundColor: "#ffffff",
+          border: "3px solid #1e3a8a",
+          borderRadius: 15,
+          transformOrigin: "top right",
+          transform: pose === "waving" ? `rotate(${armRotation}deg)` : pose === "pointing" ? "rotate(-45deg)" : "rotate(0deg)",
+          transition: "transform 0.2s ease",
+        }} />
+
+        {/* Lengan Kiri */}
+        <div style={{
+          position: "absolute",
+          right: -35,
+          top: 20,
+          width: 35,
+          height: 120,
+          backgroundColor: "#ffffff",
+          border: "3px solid #1e3a8a",
+          borderRadius: 15,
+        }} />
+      </div>
+
+      {/* Kaki / Celana */}
+      <div style={{ display: "flex", gap: 20, marginTop: -2 }}>
+        <div style={{ width: 35, height: 140, backgroundColor: "#1e3a8a", borderRadius: "0 0 10px 10px" }} />
+        <div style={{ width: 35, height: 140, backgroundColor: "#1e3a8a", borderRadius: "0 0 10px 10px" }} />
+      </div>
+    </div>
+  );
+};
