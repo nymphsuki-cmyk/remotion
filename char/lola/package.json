@@ -1,0 +1,14 @@
+{
+  "name": "alya-scientist-remotion",
+  "version": "1.0.0",
+  "description": "Remotion animation project for Alya scientist character",
+  "scripts": {
+    "dev": "remotion studio",
+    "build": "remotion render AlyaScientistAnimation out/alya.mp4"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remotion": "^4.0.0"
+  }
+}
